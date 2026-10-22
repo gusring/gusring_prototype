@@ -50,7 +50,7 @@ export default function FieldSheet({ form, field, index, values, lang, onChange,
   return (
     <div className="fixed inset-x-0 bottom-0 z-40 flex justify-center pointer-events-none">
       <section
-        className="pointer-events-auto w-full sm:max-w-lg bg-white rounded-t-[28px] shadow-sheet animate-sheet-up flex flex-col max-h-[68dvh]"
+        className="pointer-events-auto w-full sm:max-w-md bg-white rounded-t-[28px] shadow-sheet animate-sheet-up flex flex-col max-h-[68dvh]"
         aria-label={tr(field.label, lang)}
       >
         {/* 핸들 + 헤더 */}

@@ -1,3 +1,4 @@
+import type { CSSProperties } from 'react';
 import { FORM_FONT, FORM_FONT_WEIGHT, INK, marksFor } from '../forms/render';
 import { Box, FieldDef, FormDef, Mark, Point, Values } from '../forms/types';
 
@@ -69,7 +70,7 @@ interface Props {
   /** 강조 테두리만 그릴 항목 (미리보기용) */
   highlightId?: string;
   className?: string;
-  style?: React.CSSProperties;
+  style?: CSSProperties;
 }
 
 export default function FormSvg({ form, values, crop, guides, highlightId, className, style }: Props) {

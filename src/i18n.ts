@@ -15,6 +15,18 @@ export const tr = (s: L, lang: Lang, vars?: Record<string, string | number>) => 
 };
 
 export const UI = {
+  // ── 문서 선택 화면 (gusring-web 문구) ──
+  welcome:       { ko: '금천구 다국어 민원 가이드', en: 'Geumcheon Multilingual Guide', zh: '衿川多语种指南', ja: '衿川多言語ガイド', vi: 'Hướng dẫn thủ tục hành chính đa ngôn ngữ tại quận Geumcheon' },
+  subWelcome:    { ko: '모국어 안내를 보며 행정 서식을 바로 작성해요.', en: 'Fill in administrative forms with guidance in your language.', zh: '在母语指引下直接填写行政表格。', ja: '母国語の案内を見ながら行政書類をその場で作成できます。', vi: 'Điền mẫu đơn hành chính với hướng dẫn bằng tiếng mẹ đẻ.' },
+  searchPlaceholder: { ko: '서식 명칭 검색...', en: 'Search forms...', zh: '搜索表格...', ja: '書類検索...', vi: 'Tìm kiếm mẫu đơn...' },
+  catAll:        { ko: '전체', en: 'All', zh: '全部', ja: '全て', vi: 'Tất cả' },
+  noResult:      { ko: '검색 결과가 없습니다.', en: 'No results found.', zh: '无结果。', ja: '結果がありません。', vi: 'Không có kết quả.' },
+  back:          { ko: '뒤로가기', en: 'Back', zh: '返回', ja: '戻る', vi: 'Quay lại' },
+  home:          { ko: '언어 선택으로', en: 'Choose language', zh: '选择语言', ja: '言語選択へ', vi: 'Chọn ngôn ngữ' },
+  officeMap:     { ko: '통합민원실 지도', en: 'Civil service office map', zh: '综合民愿室地图', ja: '総合民願室マップ', vi: 'Sơ đồ phòng dân sự' },
+  feedback:      { ko: '피드백 남기기', en: 'Leave feedback', zh: '提交反馈', ja: 'フィードバック', vi: 'Gửi phản hồi' },
+
+  // ── 서식 작성 화면 ──
   appName:       { ko: '서식 작성 도우미', en: 'Form Helper', zh: '表格填写助手', ja: '書式記入ヘルパー', vi: 'Trợ lý điền mẫu đơn' },
   prototype:     { ko: '프로토타입', en: 'Prototype', zh: '原型', ja: 'プロトタイプ', vi: 'Bản thử nghiệm' },
   intro: {

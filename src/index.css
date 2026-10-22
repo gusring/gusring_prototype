@@ -2,16 +2,141 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ─── 디자인 토큰 (gusring-web과 동일) ─────────────────────── */
 @layer base {
+  :root {
+    --color-bg: #ffffff;
+    --color-surface: #ffffff;
+    --color-yellow: #fedb02;
+    --color-yellow-soft: #fffbe6;
+    --color-text: #111827;
+    --color-text-sub: #6b7280;
+    --color-text-hint: #9ca3af;
+    --color-border: #f0f1f5;
+    --color-border-strong: #e5e7eb;
+
+    --shadow-card: 0 2px 12px rgba(0, 0, 0, 0.06);
+    --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.09);
+    --shadow-yellow: 0 6px 24px rgba(254, 219, 2, 0.55);
+    --shadow-yellow-sm: 0 3px 12px rgba(254, 219, 2, 0.45);
+
+    --ease-toss: cubic-bezier(0.4, 0, 0.2, 1);
+    --duration-fast: 150ms;
+
+    /* 헤더 높이 (목록 화면 sticky 검색창 기준) */
+    --header-h: calc(3.5rem + env(safe-area-inset-top, 0px));
+  }
+
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+  }
+
   html {
     -webkit-text-size-adjust: 100%;
   }
+
   body {
     margin: 0;
-    @apply font-sans text-gray-900 antialiased;
-    letter-spacing: -0.02em;
-    -webkit-tap-highlight-color: transparent;
-    overscroll-behavior: none;
+    @apply font-sans antialiased;
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    letter-spacing: -0.025em;
+    line-height: 1.5;
+    overscroll-behavior: contain;
+  }
+
+  /* 데스크탑/태블릿: 앱 바깥 배경 */
+  @media (min-width: 640px) {
+    body {
+      background-color: #d1d5db;
+    }
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
+
+/* ─── 공통 컴포넌트 클래스 (gusring-web) ───────────────────── */
+@layer components {
+  .toss-card {
+    @apply bg-white rounded-4xl;
+    box-shadow: var(--shadow-card);
+    transition:
+      box-shadow var(--duration-fast) var(--ease-toss),
+      transform var(--duration-fast) var(--ease-toss);
+  }
+  .toss-card:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-1px);
+  }
+  .toss-card:active {
+    box-shadow: var(--shadow-card);
+    transform: scale(0.985);
+  }
+
+  .btn-press {
+    transition:
+      transform var(--duration-fast) var(--ease-toss),
+      opacity var(--duration-fast) var(--ease-toss);
+  }
+  .btn-press:active {
+    transform: scale(0.94);
+  }
+
+  .toss-input {
+    @apply w-full rounded-2xl py-4 px-5 text-sm font-semibold outline-none border-2 border-transparent placeholder:text-gusring-text-hint;
+    background-color: var(--color-border);
+    color: var(--color-text);
+    transition:
+      background var(--duration-fast) var(--ease-toss),
+      border-color var(--duration-fast) var(--ease-toss),
+      box-shadow var(--duration-fast) var(--ease-toss);
+  }
+  .toss-input:focus {
+    background-color: var(--color-surface);
+    border-color: var(--color-yellow);
+    box-shadow: 0 0 0 4px rgba(254, 219, 2, 0.3);
+  }
+
+  .toss-chip {
+    @apply shrink-0 px-5 py-2 rounded-full text-xs font-bold;
+    color: var(--color-text-sub);
+    background: var(--color-surface);
+    border: 2px solid var(--color-border);
+    transition: all var(--duration-fast) var(--ease-toss);
+  }
+  .toss-chip:hover {
+    border-color: var(--color-border-strong);
+    color: var(--color-text);
+  }
+  .toss-chip.active {
+    background: var(--color-yellow);
+    border-color: var(--color-yellow);
+    color: #2e2800;
+    box-shadow: var(--shadow-yellow-sm);
+    transform: scale(1.05);
+  }
+}
+
+@layer utilities {
+  .safe-top {
+    padding-top: env(safe-area-inset-top, 0px);
+  }
+  .safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom, 16px);
+  }
+  .glass {
+    backdrop-filter: blur(16px) saturate(180%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+    background-color: rgba(255, 255, 255, 0.88);
   }
 }
 

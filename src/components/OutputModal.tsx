@@ -23,7 +23,7 @@ export default function OutputModal({ form, values, lang, missingRequired, onClo
   }, [form, values]);
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/60 flex flex-col animate-fade-in">
+    <div className="fixed inset-0 z-50 bg-black/60 flex flex-col animate-fade-in sm:max-w-md sm:mx-auto">
       <header className="flex items-center justify-between px-4 py-3 bg-white shrink-0">
         <h2 className="font-black text-[16px]">{tr(UI.outputTitle, lang)}</h2>
         <button onClick={onClose} className="w-9 h-9 rounded-full bg-line flex items-center justify-center text-sub" aria-label={tr(UI.close, lang)}>

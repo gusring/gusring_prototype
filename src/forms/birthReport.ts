@@ -590,7 +590,7 @@ const fields: FieldDef[] = [
 
 export const birthReport: FormDef = {
   id: 'birth-report',
-  title: { ko: '출생신고서', en: 'Birth Report', zh: '出生申报书', ja: '出生届', vi: 'Tờ khai sinh' },
+  title: { ko: '출생신고서', en: 'Birth Report', zh: '出生申报书', ja: '出生届', vi: 'Giấy khai sinh' },
   image: '/forms/birth_ko.png',
   width: 1190,
   height: 1682,

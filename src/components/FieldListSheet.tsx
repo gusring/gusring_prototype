@@ -15,7 +15,7 @@ export default function FieldListSheet({ form, values, lang, onSelect, onClose }
   return (
     <div className="fixed inset-0 z-50 flex flex-col justify-end sm:items-center">
       <div className="absolute inset-0 bg-black/40 animate-fade-in" onClick={onClose} />
-      <section className="relative w-full sm:max-w-lg bg-white rounded-t-[28px] shadow-sheet animate-sheet-up max-h-[80dvh] flex flex-col">
+      <section className="relative w-full sm:max-w-md bg-white rounded-t-[28px] shadow-sheet animate-sheet-up max-h-[80dvh] flex flex-col">
         <header className="flex items-center justify-between px-5 py-4 border-b border-line shrink-0">
           <h2 className="font-black text-[17px]">{tr(UI.allFields, lang)}</h2>
           <button onClick={onClose} className="w-8 h-8 rounded-full bg-line flex items-center justify-center text-sub" aria-label={tr(UI.close, lang)}>
