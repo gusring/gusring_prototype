@@ -1,0 +1,36 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    margin: 0;
+    @apply font-sans text-gray-900 antialiased;
+    letter-spacing: -0.02em;
+    -webkit-tap-highlight-color: transparent;
+    overscroll-behavior: none;
+  }
+}
+
+/* ─── 인쇄: 완성된 서식 이미지만 A4 한 장으로 ─────────────── */
+.print-only {
+  display: none;
+}
+
+@media print {
+  @page {
+    size: A4;
+    margin: 0;
+  }
+  .no-print {
+    display: none !important;
+  }
+  .print-only {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+}
