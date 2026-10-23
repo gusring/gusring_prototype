@@ -181,16 +181,14 @@ export default function FormFillView({ form, lang, onBack, onLanding, onMap }: P
           onBack={onBack}
           onLanding={onLanding}
           onMap={onMap}
-          title={
-            <h1 className="font-black text-[15px] leading-tight truncate text-gusring-text">
-              {tr(form.title, lang)}
-              {lang !== 'ko' && <span className="ml-1.5 text-[11px] font-bold text-hint">{form.title.ko}</span>}
-            </h1>
-          }
         />
 
-        {/* 전체 항목 · 이전 · 다음 */}
-        <div className="shrink-0 h-12 px-3 flex items-center gap-1 bg-white border-b border-line">
+        {/* 전체 항목 · 서류 이름 · 이전 · 다음 */}
+        <div className="relative shrink-0 h-12 px-3 flex items-center gap-1 bg-white border-b border-line">
+          <div className="absolute left-1/2 -translate-x-1/2 max-w-[calc(100%-200px)] text-center pointer-events-none">
+            <h1 className="font-black text-[15px] leading-tight truncate text-gusring-text">{tr(form.title, lang)}</h1>
+            {lang !== 'ko' && <p className="text-[10px] font-bold leading-tight truncate text-hint">{form.title.ko}</p>}
+          </div>
           <button onClick={() => setListOpen(true)} className="h-10 w-10 rounded-xl text-gusring-text flex items-center justify-center active:bg-line transition" aria-label={tr(UI.allFields, lang)}>
             <Menu size={20} />
           </button>

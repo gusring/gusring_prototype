@@ -1,4 +1,3 @@
-import type { ReactNode } from 'react';
 import { ArrowLeft, Map } from 'lucide-react';
 import { Lang } from '../forms/types';
 import { tr, UI } from '../i18n';
@@ -12,11 +11,9 @@ interface Props {
   onLanding: () => void;
   onMap: () => void;
   mapActive?: boolean;
-  /** 로고 옆 제목 (서식 작성 화면) */
-  title?: ReactNode;
 }
 
-export default function Header({ lang, onBack, onLanding, onMap, mapActive, title }: Props) {
+export default function Header({ lang, onBack, onLanding, onMap, mapActive }: Props) {
   return (
     <header className="sticky top-0 z-30 glass border-b border-gusring-border safe-top shrink-0">
       <div className="px-5 h-14 flex items-center justify-between gap-3">
@@ -34,7 +31,6 @@ export default function Header({ lang, onBack, onLanding, onMap, mapActive, titl
               <img src="/gusring_logo.png" alt="Gusring" className="h-9 w-auto object-contain rounded-xl" style={{ mixBlendMode: 'multiply' }} />
             </button>
           )}
-          {title}
         </div>
 
         <div className="flex items-center gap-2 shrink-0">
