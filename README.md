@@ -6,7 +6,7 @@
 ## 화면 흐름
 `#/` 언어 선택 → `#/list` 문서 선택 → `#/form/birth-report` 서식 작성 (`#/map` 민원실 지도)
 
-언어 선택·문서 선택 화면과 헤더·지도는 [gusring-web](https://github.com/gusring/gusring-web)을 그대로 옮겼습니다.
+언어 선택·문서 선택 화면과 헤더·지도는 [gusring-web](https://github.com/gusring/gusring-web)을 그대로 옮겼습니다. (헤더의 피드백 버튼은 제외)
 처음에 고른 언어로 서식 작성 화면의 안내와 라벨이 모두 표시됩니다.
 
 ## 서식 작성 화면

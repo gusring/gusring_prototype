@@ -24,7 +24,6 @@ export const UI = {
   back:          { ko: '뒤로가기', en: 'Back', zh: '返回', ja: '戻る', vi: 'Quay lại' },
   home:          { ko: '언어 선택으로', en: 'Choose language', zh: '选择语言', ja: '言語選択へ', vi: 'Chọn ngôn ngữ' },
   officeMap:     { ko: '통합민원실 지도', en: 'Civil service office map', zh: '综合民愿室地图', ja: '総合民願室マップ', vi: 'Sơ đồ phòng dân sự' },
-  feedback:      { ko: '피드백 남기기', en: 'Leave feedback', zh: '提交反馈', ja: 'フィードバック', vi: 'Gửi phản hồi' },
 
   // ── 서식 작성 화면 ──
   appName:       { ko: '서식 작성 도우미', en: 'Form Helper', zh: '表格填写助手', ja: '書式記入ヘルパー', vi: 'Trợ lý điền mẫu đơn' },

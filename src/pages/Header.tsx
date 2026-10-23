@@ -1,11 +1,9 @@
 import type { ReactNode } from 'react';
-import { ArrowLeft, Map, MessageSquare } from 'lucide-react';
+import { ArrowLeft, Map } from 'lucide-react';
 import { Lang } from '../forms/types';
 import { tr, UI } from '../i18n';
 
-// gusring-web Header 그대로 (로고/뒤로가기 + 지도 + 피드백)
-
-const FEEDBACK_URL = 'https://forms.gle/wmRLR4rZjTGkge2u6';
+// gusring-web Header 기반 (로고/뒤로가기 + 지도)
 
 interface Props {
   lang: Lang;
@@ -48,13 +46,6 @@ export default function Header({ lang, onBack, onLanding, onMap, mapActive, titl
             aria-label={tr(UI.officeMap, lang)}
           >
             <Map size={18} />
-          </button>
-          <button
-            onClick={() => window.open(FEEDBACK_URL, '_blank', 'noopener,noreferrer')}
-            className="btn-press h-9 w-9 flex items-center justify-center bg-gusring-yellow-soft rounded-xl text-gusring-brand-700 border border-gusring-brand-100 shadow-card active:scale-95 transition-transform"
-            aria-label={tr(UI.feedback, lang)}
-          >
-            <MessageSquare size={18} />
           </button>
         </div>
       </div>
