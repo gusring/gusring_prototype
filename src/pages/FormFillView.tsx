@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
-import { Eye, EyeOff, FileCheck2, List, Minus, Plus, RotateCcw, X } from 'lucide-react';
+import { Eye, EyeOff, FileCheck2, Menu, Minus, Plus, RotateCcw, X } from 'lucide-react';
 import FieldListSheet from '../components/FieldListSheet';
 import FieldSheet from '../components/FieldSheet';
 import FormSvg, { fieldCrop } from '../components/FormSvg';
@@ -176,6 +176,15 @@ export default function FormFillView({ form, lang, onBack, onLanding, onMap }: P
           onBack={onBack}
           onLanding={onLanding}
           onMap={onMap}
+          actions={
+            <button
+              onClick={() => setListOpen(true)}
+              className="btn-press h-9 w-9 flex items-center justify-center rounded-xl text-gusring-text hover:bg-gusring-border transition-colors"
+              aria-label={tr(UI.allFields, lang)}
+            >
+              <Menu size={22} />
+            </button>
+          }
           title={
             <h1 className="font-black text-[15px] leading-tight truncate text-gusring-text">
               {tr(form.title, lang)}
@@ -183,29 +192,6 @@ export default function FormFillView({ form, lang, onBack, onLanding, onMap }: P
             </h1>
           }
         />
-        <div className="shrink-0 bg-white border-b border-line">
-          {/* 진행률 */}
-          <div className="px-4 py-2.5 flex items-center gap-3">
-            <div className="flex-1">
-              <div className="flex justify-between text-[11px] font-bold mb-1">
-                <span className="text-gray-900">
-                  {requiredDone === required.length ? tr(UI.allRequiredDone, lang) : tr(UI.requiredProgress, lang, { done: requiredDone, total: required.length })}
-                </span>
-                <span className="text-hint">{tr(UI.filledCount, lang, { done: filled.size, total: form.fields.length })}</span>
-              </div>
-              <div className="h-1.5 rounded-full bg-line overflow-hidden">
-                <div className="h-full bg-brand transition-all duration-300" style={{ width: `${(requiredDone / required.length) * 100}%` }} />
-              </div>
-            </div>
-            <button
-              onClick={() => setListOpen(true)}
-              className="shrink-0 h-9 px-3 rounded-xl bg-gray-900 text-brand text-[12px] font-black flex items-center gap-1 active:scale-95 transition"
-            >
-              <List size={13} /> {tr(UI.allFields, lang)}
-            </button>
-          </div>
-        </div>
-
         {/* 서식 뷰어 */}
         <div className="relative flex-1 min-h-0">
           <div ref={viewerRef} className="absolute inset-0 overflow-auto bg-gray-100">
