@@ -176,15 +176,6 @@ export default function FormFillView({ form, lang, onBack, onLanding, onMap }: P
           onBack={onBack}
           onLanding={onLanding}
           onMap={onMap}
-          actions={
-            <button
-              onClick={() => setListOpen(true)}
-              className="btn-press h-9 w-9 flex items-center justify-center rounded-xl text-gusring-text hover:bg-gusring-border transition-colors"
-              aria-label={tr(UI.allFields, lang)}
-            >
-              <Menu size={22} />
-            </button>
-          }
           title={
             <h1 className="font-black text-[15px] leading-tight truncate text-gusring-text">
               {tr(form.title, lang)}
@@ -243,7 +234,10 @@ export default function FormFillView({ form, lang, onBack, onLanding, onMap }: P
 
         {/* 하단 바 */}
         <nav className="shrink-0 border-t border-line bg-white pb-[env(safe-area-inset-bottom)]">
-          <div className="px-4 py-2.5 flex gap-2">
+          <div className="px-4 py-2.5 flex gap-1">
+            <button onClick={() => setListOpen(true)} className="h-12 w-12 rounded-2xl text-gusring-text flex items-center justify-center active:bg-line transition" aria-label={tr(UI.allFields, lang)}>
+              <Menu size={20} />
+            </button>
             <button onClick={reset} className="h-12 w-12 rounded-2xl text-sub flex items-center justify-center active:bg-line transition" aria-label={tr(UI.reset, lang)}>
               <RotateCcw size={16} />
             </button>
