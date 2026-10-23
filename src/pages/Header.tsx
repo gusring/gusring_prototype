@@ -28,7 +28,7 @@ export default function Header({ lang, onBack, onLanding, onMap, mapActive }: Pr
             </button>
           ) : (
             <button onClick={onLanding} className="btn-press shrink-0" aria-label={tr(UI.home, lang)}>
-              <img src="/gusring_logo.png" alt="Gusring" className="h-9 w-auto object-contain rounded-xl" style={{ mixBlendMode: 'multiply' }} />
+              <img src="/gusring_icon.png" alt="Gusring" className="h-9 w-9 object-contain" />
             </button>
           )}
         </div>
