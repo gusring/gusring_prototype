@@ -38,7 +38,6 @@ export const UI = {
   },
   requiredProgress: { ko: '필수 {done}/{total}', en: 'Required {done}/{total}', zh: '必填 {done}/{total}', ja: '必須 {done}/{total}', vi: 'Bắt buộc {done}/{total}' },
   filledCount:   { ko: '전체 {done}/{total} 작성', en: '{done}/{total} filled', zh: '已填写 {done}/{total}', ja: '{done}/{total} 記入済み', vi: 'Đã điền {done}/{total}' },
-  nextBlank:     { ko: '다음 빈칸', en: 'Next blank', zh: '下一个空白', ja: '次の空欄', vi: 'Ô trống tiếp theo' },
   allRequiredDone: { ko: '필수 항목을 모두 채웠어요', en: 'All required fields are filled', zh: '必填项已全部完成', ja: '必須項目をすべて入力しました', vi: 'Đã điền đủ các mục bắt buộc' },
   required:      { ko: '필수', en: 'Required', zh: '必填', ja: '必須', vi: 'Bắt buộc' },
   optional:      { ko: '선택', en: 'Optional', zh: '选填', ja: '任意', vi: 'Không bắt buộc' },

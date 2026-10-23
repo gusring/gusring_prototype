@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
-import { Eye, EyeOff, FileCheck2, List, Minus, Plus, RotateCcw, Sparkles, X } from 'lucide-react';
+import { Eye, EyeOff, FileCheck2, List, Minus, Plus, RotateCcw, X } from 'lucide-react';
 import FieldListSheet from '../components/FieldListSheet';
 import FieldSheet from '../components/FieldSheet';
 import FormSvg, { fieldCrop } from '../components/FormSvg';
@@ -148,13 +148,6 @@ export default function FormFillView({ form, lang, onBack, onLanding, onMap }: P
     if (f) select(f.id);
   };
 
-  const nextBlank = () => {
-    const start = activeIndex + 1;
-    const order = [...form.fields.slice(start), ...form.fields.slice(0, start)];
-    const target = order.find((f) => f.required && !filled.has(f.id)) ?? order.find((f) => !filled.has(f.id));
-    if (target) select(target.id);
-  };
-
   const updateValue = (id: string, value: FieldValue) => setValues((prev) => ({ ...prev, [id]: value }));
 
   const reset = () => {
@@ -204,14 +197,12 @@ export default function FormFillView({ form, lang, onBack, onLanding, onMap }: P
                 <div className="h-full bg-brand transition-all duration-300" style={{ width: `${(requiredDone / required.length) * 100}%` }} />
               </div>
             </div>
-            {filled.size < form.fields.length && (
-              <button
-                onClick={nextBlank}
-                className="shrink-0 h-9 px-3 rounded-xl bg-gray-900 text-brand text-[12px] font-black flex items-center gap-1 active:scale-95 transition"
-              >
-                <Sparkles size={13} /> {tr(UI.nextBlank, lang)}
-              </button>
-            )}
+            <button
+              onClick={() => setListOpen(true)}
+              className="shrink-0 h-9 px-3 rounded-xl bg-gray-900 text-brand text-[12px] font-black flex items-center gap-1 active:scale-95 transition"
+            >
+              <List size={13} /> {tr(UI.allFields, lang)}
+            </button>
           </div>
         </div>
 
@@ -267,10 +258,7 @@ export default function FormFillView({ form, lang, onBack, onLanding, onMap }: P
         {/* 하단 바 */}
         <nav className="shrink-0 border-t border-line bg-white pb-[env(safe-area-inset-bottom)]">
           <div className="px-4 py-2.5 flex gap-2">
-            <button onClick={() => setListOpen(true)} className="h-12 px-4 rounded-2xl bg-line text-gray-800 font-bold text-[13px] flex items-center gap-1.5">
-              <List size={16} /> {tr(UI.allFields, lang)}
-            </button>
-            <button onClick={reset} className="h-12 w-12 rounded-2xl bg-white border border-gray-200 text-sub flex items-center justify-center" aria-label={tr(UI.reset, lang)}>
+            <button onClick={reset} className="h-12 w-12 rounded-2xl text-sub flex items-center justify-center active:bg-line transition" aria-label={tr(UI.reset, lang)}>
               <RotateCcw size={16} />
             </button>
             <button
