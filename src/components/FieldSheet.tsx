@@ -1,9 +1,9 @@
+import { useEffect, useRef } from 'react';
 import { ChevronLeft, ChevronRight, Copy, Info, X } from 'lucide-react';
 import { isFilled } from '../forms/render';
-import { Box, FieldDef, FieldValue, FormDef, Lang, Values } from '../forms/types';
+import { FieldDef, FieldValue, FormDef, Lang, Values } from '../forms/types';
 import { tr, UI } from '../i18n';
 import FieldInputs from './FieldInputs';
-import FormSvg from './FormSvg';
 
 interface Props {
   form: FormDef;
@@ -15,29 +15,22 @@ interface Props {
   onPrev: () => void;
   onNext: () => void;
   onClose: () => void;
+  /** 시트 높이가 바뀔 때 — 서식을 시트 위 남은 공간에 맞춰 확대하는 데 쓴다 */
+  onHeight: (px: number) => void;
 }
 
-/** 미리보기로 잘라낼 영역: 칸 + (좁은 칸이면) 왼쪽의 한국어 라벨 */
-function previewCrop(field: FieldDef, form: FormDef): Box {
-  const a = field.area;
-  const left = a.w < 420 ? 120 : 16;
-  const right = field.badge === 'margin' ? 0 : 16;
-  let x = Math.max(0, a.x - left);
-  let w = Math.min(form.width, a.x + a.w + right) - x;
-  const h = a.h + 20;
-  // 세로로 긴 칸은 미리보기가 너무 커지지 않도록 가로 폭을 넓힌다
-  if (w < h * 3) {
-    const grow = h * 3 - w;
-    x = Math.max(0, Math.min(form.width - h * 3, x - grow / 2));
-    w = h * 3;
-  }
-  return { x, y: a.y - 10, w, h };
-}
-
-export default function FieldSheet({ form, field, index, values, lang, onChange, onPrev, onNext, onClose }: Props) {
+export default function FieldSheet({ form, field, index, values, lang, onChange, onPrev, onNext, onClose, onHeight }: Props) {
   const value = values[field.id] ?? {};
   const isLast = index === form.fields.length - 1;
-  const crop = previewCrop(field, form);
+  const sheetRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const el = sheetRef.current;
+    if (!el) return;
+    const ro = new ResizeObserver(() => onHeight(el.offsetHeight));
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, [onHeight]);
   const sources = (field.copyFrom ?? []).filter((c) => isFilled(form.fields.find((f) => f.id === c.field)!, values[c.field]));
 
   const copy = (sourceId: string, map: Record<string, string>) => {
@@ -50,6 +43,7 @@ export default function FieldSheet({ form, field, index, values, lang, onChange,
   return (
     <div className="fixed inset-x-0 bottom-0 z-40 flex justify-center pointer-events-none">
       <section
+        ref={sheetRef}
         className="pointer-events-auto w-full sm:max-w-md bg-white rounded-t-[28px] shadow-sheet animate-sheet-up flex flex-col max-h-[68dvh]"
         aria-label={tr(field.label, lang)}
       >
@@ -57,7 +51,7 @@ export default function FieldSheet({ form, field, index, values, lang, onChange,
         <div className="pt-2.5 flex justify-center shrink-0">
           <div className="w-10 h-1 rounded-full bg-gray-200" />
         </div>
-        <header className="flex items-start gap-3 px-5 pt-3 pb-2 shrink-0">
+        <header className="flex items-center gap-3 px-5 pt-3 pb-2 shrink-0">
           <span className="w-8 h-8 rounded-full bg-gray-900 text-brand text-sm font-black flex items-center justify-center shrink-0">
             {index + 1}
           </span>
@@ -68,9 +62,6 @@ export default function FieldSheet({ form, field, index, values, lang, onChange,
                 {tr(field.required ? UI.required : UI.optional, lang)}
               </span>
             </div>
-            <p className="mt-1 text-[11px] font-semibold text-hint truncate">
-              {tr(UI.onKoreanForm, lang)}: <span className="text-sub">{field.koLabel}</span>
-            </p>
           </div>
           <button onClick={onClose} className="w-8 h-8 -mr-1 rounded-full bg-line flex items-center justify-center text-sub shrink-0" aria-label={tr(UI.close, lang)}>
             <X size={16} />
@@ -108,21 +99,6 @@ export default function FieldSheet({ form, field, index, values, lang, onChange,
             onChange={(v) => onChange(field.id, v)}
             onSubmit={isLast ? onClose : onNext}
           />
-
-          {/* 한국어 서식 미리보기 */}
-          <div>
-            <p className="text-[11px] font-black text-brand-700 uppercase tracking-wide mb-1.5">{tr(UI.preview, lang)}</p>
-            <div className="rounded-xl border border-line overflow-x-auto bg-white">
-              <FormSvg
-                form={form}
-                values={values}
-                crop={crop}
-                highlightId={field.id}
-                className="block"
-                style={{ width: `max(100%, ${Math.round(crop.w * 0.6)}px)` }}
-              />
-            </div>
-          </div>
         </div>
 
         {/* 하단 버튼 */}

@@ -1,6 +1,5 @@
-import type { CSSProperties } from 'react';
 import { FORM_FONT, FORM_FONT_WEIGHT, INK, marksFor } from '../forms/render';
-import { Box, FieldDef, FormDef, Mark, Point, Values } from '../forms/types';
+import { Box, FieldDef, FieldValue, FormDef, Mark, Point, Values } from '../forms/types';
 
 // ─────────────────────────────────────────────────────────────
 // 한국어 원본 서식 이미지 + 입력값(Mark) + 번호 토글(가이드)
@@ -16,6 +15,36 @@ export function badgePoint(field: FieldDef): Point {
   const cy = a.h > 50 ? a.y + BADGE_R + 2 : a.y + a.h / 2;
   if (field.badge === 'margin') return { x: MARGIN_X, y: a.y + a.h / 2 };
   return { x: a.x + BADGE_R + 2, y: cy };
+}
+
+/** 선택형 칸은 선택지(와 보이는 추가 입력칸)까지만 잘라 더 크게 보여준다 */
+function contentArea(field: FieldDef, value?: FieldValue): Box {
+  const input = field.input;
+  if (input.kind !== 'choice') return field.area;
+  const xs = input.options.map((o) => o.mark.x);
+  const x0 = Math.min(...xs) - 24;
+  // 마지막 선택지 번호 뒤의 글자(예: 「기타(자격:」)까지 보이도록 여유를 둔다
+  let x1 = Math.min(field.area.x + field.area.w, Math.max(...xs) + 110);
+  const extra = input.extra;
+  if (extra && (!extra.when || (value?.choice && extra.when.includes(value.choice)))) x1 = Math.max(x1, extra.box.x + extra.box.w);
+  return { ...field.area, x: x0, w: x1 - x0 };
+}
+
+/** 칸을 확대해 보여줄 영역: 칸 + (좁은 칸이면) 왼쪽의 한국어 라벨 */
+export function fieldCrop(field: FieldDef, form: FormDef, value?: FieldValue): Box {
+  const a = contentArea(field, value);
+  const left = a.w < 420 ? 120 : 16;
+  const right = field.badge === 'margin' ? 0 : 16;
+  let x = Math.max(0, a.x - left);
+  let w = Math.min(form.width, a.x + a.w + right) - x;
+  const h = a.h + 20;
+  // 세로로 긴 칸은 너무 크게 확대되지 않도록 가로 폭을 넓힌다
+  if (w < h * 3) {
+    const grow = h * 3 - w;
+    x = Math.max(0, Math.min(form.width - h * 3, x - grow / 2));
+    w = h * 3;
+  }
+  return { x, y: a.y - 10, w, h };
 }
 
 export function MarkView({ mark }: { mark: Mark }) {
@@ -64,23 +93,17 @@ interface Guides {
 interface Props {
   form: FormDef;
   values: Values;
-  /** 잘라서 보여줄 영역 (없으면 서식 전체) */
-  crop?: Box;
   guides?: Guides;
-  /** 강조 테두리만 그릴 항목 (미리보기용) */
-  highlightId?: string;
+  /** 번호를 숨긴 상태에서도 작성 중인 칸은 강조한다 */
+  highlightId?: string | null;
   className?: string;
-  style?: CSSProperties;
 }
 
-export default function FormSvg({ form, values, crop, guides, highlightId, className, style }: Props) {
-  const vb = crop ?? { x: 0, y: 0, w: form.width, h: form.height };
-
+export default function FormSvg({ form, values, guides, highlightId, className }: Props) {
   return (
     <svg
-      viewBox={`${vb.x} ${vb.y} ${vb.w} ${vb.h}`}
+      viewBox={`0 0 ${form.width} ${form.height}`}
       className={className}
-      style={style}
       role="img"
       aria-label={form.title.ko}
     >

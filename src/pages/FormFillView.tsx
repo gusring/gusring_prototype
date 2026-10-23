@@ -2,10 +2,10 @@ import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } fr
 import { Eye, EyeOff, FileCheck2, List, Minus, Plus, RotateCcw, Sparkles, X } from 'lucide-react';
 import FieldListSheet from '../components/FieldListSheet';
 import FieldSheet from '../components/FieldSheet';
-import FormSvg, { badgePoint } from '../components/FormSvg';
+import FormSvg, { fieldCrop } from '../components/FormSvg';
 import OutputModal from '../components/OutputModal';
 import { isFilled } from '../forms/render';
-import { FieldValue, FormDef, Lang, Values } from '../forms/types';
+import { Box, FieldValue, FormDef, Lang, Values } from '../forms/types';
 import { tr, UI } from '../i18n';
 import { load, remove, save } from '../lib/storage';
 import Header from './Header';
@@ -13,7 +13,7 @@ import Header from './Header';
 const TIP_KEY = 'gusring.tipClosed';
 
 const MIN_ZOOM = 1;
-const MAX_ZOOM = 3;
+const MAX_ZOOM = 4;
 
 interface Props {
   form: FormDef;
@@ -35,6 +35,15 @@ export default function FormFillView({ form, lang, onBack, onLanding, onMap }: P
   const [printSrc, setPrintSrc] = useState<string | null>(null);
   const [tipOpen, setTipOpen] = useState(() => !load<boolean>(TIP_KEY, false));
   const [, setFontTick] = useState(0);
+  /** 열려 있는 바텀시트 높이 (px) */
+  const [sheetH, setSheetH] = useState(0);
+  /** 줌을 바꾼 뒤 이 영역(서식 픽셀 좌표)이 보이도록 스크롤 */
+  const [scrollTick, setScrollTick] = useState(0);
+  const pendingFocus = useRef<{ box: Box; visibleH: number } | null>(null);
+  const lastActive = useRef<string | null>(null);
+  /** 확대 영역 계산용 — 값이 바뀔 때마다 다시 확대하지 않도록 ref로 읽는다 */
+  const valuesRef = useRef(values);
+  valuesRef.current = values;
 
   const viewerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLDivElement>(null);
@@ -72,37 +81,67 @@ export default function FormFillView({ form, lang, onBack, onLanding, onMap }: P
 
   useLayoutEffect(() => {
     const v = viewerRef.current;
+    const c = canvasRef.current;
+    if (!v || !c) return;
+
+    const focus = pendingFocus.current;
+    if (focus) {
+      // 확대된 칸을 가로 가운데, 시트 위 남은 공간의 세로 가운데에 놓는다
+      const scale = c.clientWidth / form.width;
+      const w = focus.box.w * scale;
+      const h = focus.box.h * scale;
+      v.scrollLeft = w <= v.clientWidth ? focus.box.x * scale - (v.clientWidth - w) / 2 : focus.box.x * scale - 12;
+      v.scrollTop = focus.box.y * scale - Math.max(12, (focus.visibleH - h) / 2);
+      pendingFocus.current = null;
+      return;
+    }
+
     const a = zoomAnchor.current;
-    if (!v || !a) return;
+    if (!a) return;
     v.scrollLeft = a.x * v.scrollWidth - v.clientWidth / 2;
     v.scrollTop = a.y * v.scrollHeight - v.clientHeight / 2;
     zoomAnchor.current = null;
-  }, [zoom]);
+  }, [zoom, scrollTick, form]);
 
-  // ── 선택한 칸으로 스크롤 (바텀시트 위쪽에 보이도록) ────────
-  const scrollToField = useCallback((id: string) => {
+  /** 작성 중인 칸을 바텀시트 위 공간에 꽉 차게 확대 */
+  const focusField = useCallback((id: string, sheetPx: number) => {
     const v = viewerRef.current;
-    const c = canvasRef.current;
     const f = form.fields.find((x) => x.id === id);
-    if (!v || !c || !f) return;
-    const scale = c.clientWidth / form.width;
-    const badge = badgePoint(f);
-    const left = Math.min(f.area.x, badge.x - 20) * scale;
-    const right = Math.max(f.area.x + f.area.w, badge.x + 20) * scale;
-    const fits = right - left <= v.clientWidth - 24;
-    v.scrollTo({
-      left: fits ? (left + right) / 2 - v.clientWidth / 2 : left - 12,
-      top: f.area.y * scale - 28,
-      behavior: 'smooth',
-    });
+    if (!v || !f) return;
+    const box = fieldCrop(f, form, valuesRef.current[id]);
+    const vw = v.clientWidth;
+    const visibleH = Math.max(100, window.innerHeight - sheetPx - v.getBoundingClientRect().top);
+    const byWidth = ((vw - 24) / vw) * (form.width / box.w);
+    const byHeight = (visibleH * 0.85) / ((box.h / form.width) * vw);
+    pendingFocus.current = { box, visibleH };
+    setZoom(+Math.min(MAX_ZOOM, Math.max(MIN_ZOOM, Math.min(byWidth, byHeight))).toFixed(3));
+    setScrollTick((t) => t + 1);
   }, [form]);
+
+  // 시트가 열리거나 높이가 바뀌면 작성 중인 칸으로 확대
+  useEffect(() => {
+    if (activeId && sheetH) focusField(activeId, sheetH);
+  }, [activeId, sheetH, focusField]);
+
+  // 시트를 닫으면 100%로 돌아가며 방금 쓴 칸 근처를 보여준다
+  useEffect(() => {
+    if (activeId) {
+      lastActive.current = activeId;
+      return;
+    }
+    const f = form.fields.find((x) => x.id === lastActive.current);
+    lastActive.current = null;
+    setSheetH(0);
+    if (!f || !viewerRef.current) return;
+    pendingFocus.current = { box: { x: 0, y: f.area.y, w: form.width, h: f.area.h }, visibleH: viewerRef.current.clientHeight };
+    setZoom(1);
+    setScrollTick((t) => t + 1);
+  }, [activeId, form]);
 
   const select = useCallback((id: string) => {
     setActiveId(id);
     setListOpen(false);
-    // 시트가 열리며 하단 여백이 생긴 뒤 스크롤
-    requestAnimationFrame(() => scrollToField(id));
-  }, [scrollToField]);
+  }, []);
 
   const goto = (index: number) => {
     const f = form.fields[index];
@@ -189,6 +228,7 @@ export default function FormFillView({ form, lang, onBack, onLanding, onMap }: P
                 values={values}
                 className="block w-full h-auto select-none"
                 guides={showGuides ? { activeId, filled, onSelect: select } : undefined}
+                highlightId={showGuides ? null : activeId}
               />
             </div>
           </div>
@@ -253,6 +293,7 @@ export default function FormFillView({ form, lang, onBack, onLanding, onMap }: P
             onPrev={() => goto(activeIndex - 1)}
             onNext={() => goto(activeIndex + 1)}
             onClose={() => setActiveId(null)}
+            onHeight={setSheetH}
           />
         )}
 

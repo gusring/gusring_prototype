@@ -42,8 +42,6 @@ export const UI = {
   allRequiredDone: { ko: '필수 항목을 모두 채웠어요', en: 'All required fields are filled', zh: '必填项已全部完成', ja: '必須項目をすべて入力しました', vi: 'Đã điền đủ các mục bắt buộc' },
   required:      { ko: '필수', en: 'Required', zh: '必填', ja: '必須', vi: 'Bắt buộc' },
   optional:      { ko: '선택', en: 'Optional', zh: '选填', ja: '任意', vi: 'Không bắt buộc' },
-  onKoreanForm:  { ko: '한국어 서식 칸', en: 'On the Korean form', zh: '韩文表格栏位', ja: '韓国語書式の欄', vi: 'Ô trên mẫu tiếng Hàn' },
-  preview:       { ko: '서식에 이렇게 들어가요', en: 'How it appears on the form', zh: '将这样填入表格', ja: '書式にはこう記入されます', vi: 'Sẽ hiển thị trên mẫu đơn như sau' },
   saveNext:      { ko: '저장하고 다음', en: 'Save & next', zh: '保存并继续', ja: '保存して次へ', vi: 'Lưu & tiếp' },
   save:          { ko: '저장', en: 'Save', zh: '保存', ja: '保存', vi: 'Lưu' },
   prev:          { ko: '이전', en: 'Back', zh: '上一项', ja: '前へ', vi: 'Trước' },
