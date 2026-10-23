@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
-import { Eye, EyeOff, FileCheck2, Menu, Minus, Plus, RotateCcw, X } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Eye, EyeOff, FileCheck2, Menu, Minus, Plus, RotateCcw, X } from 'lucide-react';
 import FieldListSheet from '../components/FieldListSheet';
 import FieldSheet from '../components/FieldSheet';
 import FormSvg, { fieldCrop } from '../components/FormSvg';
@@ -138,10 +138,14 @@ export default function FormFillView({ form, lang, onBack, onLanding, onMap }: P
     setScrollTick((t) => t + 1);
   }, [activeId, form]);
 
+  /** 마지막으로 작성한 칸 — 시트를 닫아도 이전/다음 이동의 기준이 된다 */
+  const [cursor, setCursor] = useState(-1);
+
   const select = useCallback((id: string) => {
     setActiveId(id);
+    setCursor(form.fields.findIndex((f) => f.id === id));
     setListOpen(false);
-  }, []);
+  }, [form]);
 
   const goto = (index: number) => {
     const f = form.fields[index];
@@ -154,6 +158,7 @@ export default function FormFillView({ form, lang, onBack, onLanding, onMap }: P
     if (!window.confirm(tr(UI.resetConfirm, lang))) return;
     setValues({});
     setActiveId(null);
+    setCursor(-1);
     remove(VALUES_KEY);
   };
 
@@ -183,6 +188,28 @@ export default function FormFillView({ form, lang, onBack, onLanding, onMap }: P
             </h1>
           }
         />
+
+        {/* 전체 항목 · 이전 · 다음 */}
+        <div className="shrink-0 h-12 px-3 flex items-center gap-1 bg-white border-b border-line">
+          <button onClick={() => setListOpen(true)} className="h-10 w-10 rounded-xl text-gusring-text flex items-center justify-center active:bg-line transition" aria-label={tr(UI.allFields, lang)}>
+            <Menu size={20} />
+          </button>
+          <button
+            onClick={() => goto(cursor - 1)}
+            disabled={cursor <= 0}
+            className="h-9 pl-2 pr-3 rounded-xl bg-line text-gray-800 text-[13px] font-bold flex items-center gap-0.5 active:scale-95 transition disabled:opacity-40"
+          >
+            <ChevronLeft size={16} /> {tr(UI.prev, lang)}
+          </button>
+          <button
+            onClick={() => goto(cursor + 1)}
+            disabled={cursor >= form.fields.length - 1}
+            className="h-9 pl-3 pr-2 rounded-xl bg-line text-gray-800 text-[13px] font-bold flex items-center gap-0.5 active:scale-95 transition disabled:opacity-40"
+          >
+            {tr(UI.next, lang)} <ChevronRight size={16} />
+          </button>
+        </div>
+
         {/* 서식 뷰어 */}
         <div className="relative flex-1 min-h-0">
           <div ref={viewerRef} className="absolute inset-0 overflow-auto bg-gray-100">
@@ -235,9 +262,6 @@ export default function FormFillView({ form, lang, onBack, onLanding, onMap }: P
         {/* 하단 바 */}
         <nav className="shrink-0 border-t border-line bg-white pb-[env(safe-area-inset-bottom)]">
           <div className="px-4 py-2.5 flex gap-1">
-            <button onClick={() => setListOpen(true)} className="h-12 w-12 rounded-2xl text-gusring-text flex items-center justify-center active:bg-line transition" aria-label={tr(UI.allFields, lang)}>
-              <Menu size={20} />
-            </button>
             <button onClick={reset} className="h-12 w-12 rounded-2xl text-sub flex items-center justify-center active:bg-line transition" aria-label={tr(UI.reset, lang)}>
               <RotateCcw size={16} />
             </button>

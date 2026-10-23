@@ -40,6 +40,7 @@ export const UI = {
   saveNext:      { ko: '저장하고 다음', en: 'Save & next', zh: '保存并继续', ja: '保存して次へ', vi: 'Lưu & tiếp' },
   save:          { ko: '저장', en: 'Save', zh: '保存', ja: '保存', vi: 'Lưu' },
   prev:          { ko: '이전', en: 'Back', zh: '上一项', ja: '前へ', vi: 'Trước' },
+  next:          { ko: '다음', en: 'Next', zh: '下一项', ja: '次へ', vi: 'Tiếp' },
   clear:         { ko: '지우기', en: 'Clear', zh: '清除', ja: '消去', vi: 'Xóa' },
   close:         { ko: '닫기', en: 'Close', zh: '关闭', ja: '閉じる', vi: 'Đóng' },
   hangulWarn:    { ko: '한글로 적어야 서식에 올바르게 들어가요.', en: 'Please write this in Korean letters (Hangul).', zh: '请用韩文书写。', ja: 'ハングルで書いてください。', vi: 'Vui lòng viết bằng chữ Hàn (Hangul).' },
