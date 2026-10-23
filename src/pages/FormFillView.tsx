@@ -14,8 +14,6 @@ const TIP_KEY = 'gusring.tipClosed';
 
 const MIN_ZOOM = 1;
 const MAX_ZOOM = 3;
-/** 휴대폰에서도 칸이 읽힐 만큼 서식을 키워서 시작한다 */
-const COMFORT_WIDTH = 760;
 
 interface Props {
   form: FormDef;
@@ -59,12 +57,7 @@ export default function FormFillView({ form, lang, onBack, onLanding, onMap }: P
   const activeIndex = form.fields.findIndex((f) => f.id === activeId);
   const activeField = activeIndex >= 0 ? form.fields[activeIndex] : null;
 
-  // ── 줌 ─────────────────────────────────────────────────────
-  useLayoutEffect(() => {
-    const w = viewerRef.current?.clientWidth ?? COMFORT_WIDTH;
-    setZoom(Math.min(MAX_ZOOM, Math.max(MIN_ZOOM, COMFORT_WIDTH / w)));
-  }, []);
-
+  // ── 줌 (서식 전체 폭이 화면에 맞는 100%에서 시작) ─────────
   const changeZoom = (factor: number) => {
     const v = viewerRef.current;
     if (v) {
