@@ -197,16 +197,18 @@ export default function FormFillView({ form, lang, onBack, onLanding, onMap }: P
           <button
             onClick={() => goto(cursor - 1)}
             disabled={cursor <= 0}
-            className="h-9 pl-2 pr-3 rounded-xl bg-line text-gray-800 text-[13px] font-bold flex items-center gap-0.5 active:scale-95 transition disabled:opacity-40"
+            className="ml-auto h-9 w-9 rounded-xl bg-line text-gray-800 flex items-center justify-center active:scale-95 transition disabled:opacity-40"
+            aria-label={tr(UI.prev, lang)}
           >
-            <ChevronLeft size={16} /> {tr(UI.prev, lang)}
+            <ChevronLeft size={18} />
           </button>
           <button
             onClick={() => goto(cursor + 1)}
             disabled={cursor >= form.fields.length - 1}
-            className="h-9 pl-3 pr-2 rounded-xl bg-line text-gray-800 text-[13px] font-bold flex items-center gap-0.5 active:scale-95 transition disabled:opacity-40"
+            className="h-9 w-9 rounded-xl bg-line text-gray-800 flex items-center justify-center active:scale-95 transition disabled:opacity-40"
+            aria-label={tr(UI.next, lang)}
           >
-            {tr(UI.next, lang)} <ChevronRight size={16} />
+            <ChevronRight size={18} />
           </button>
         </div>
 
