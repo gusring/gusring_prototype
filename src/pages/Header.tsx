@@ -14,11 +14,9 @@ interface Props {
   mapActive?: boolean;
   /** 로고 옆 제목 (서식 작성 화면) */
   title?: ReactNode;
-  /** 지도 버튼 왼쪽에 붙는 화면별 버튼 */
-  actions?: ReactNode;
 }
 
-export default function Header({ lang, onBack, onLanding, onMap, mapActive, title, actions }: Props) {
+export default function Header({ lang, onBack, onLanding, onMap, mapActive, title }: Props) {
   return (
     <header className="sticky top-0 z-30 glass border-b border-gusring-border safe-top shrink-0">
       <div className="px-5 h-14 flex items-center justify-between gap-3">
@@ -40,7 +38,6 @@ export default function Header({ lang, onBack, onLanding, onMap, mapActive, titl
         </div>
 
         <div className="flex items-center gap-2 shrink-0">
-          {actions}
           <button
             onClick={onMap}
             className={`btn-press h-9 w-9 flex items-center justify-center rounded-xl border border-gusring-brand-100 shadow-card active:scale-95 transition-all ${
